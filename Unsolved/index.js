@@ -3,8 +3,7 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const util = require('util');
 
-const generator = require('../Unsolved/utils/generateMarkdown.js');
-const api = require('../Unsolved/api');
+const generateMarkdown = require('./utils/generateMarkdown');
 
 const writeFileAsync = util.promisify(fs.writeFile);
 
@@ -13,8 +12,14 @@ function promptUser() {
         .prompt([
             {
                 type: 'input',
-                message: 'Enter your username',
-                name: 'username'
+                message: 'Enter your github username',
+                name: 'github'
+            },
+            {
+                type: "list",
+                name: "license",
+                message: "What kind of license should your project have?",
+                choices: ["MIT", "APACHE 2.0", "GPL 3.0", "BSD 3", "None"]
             },
             {
                 type: 'input',
@@ -26,11 +31,6 @@ function promptUser() {
                 type: 'input',
                 message: 'Give a description of your project',
                 name: 'description'
-            },
-            {
-                type: 'input',
-                message: 'Create your table of Contents' + '\n',
-                name: 'contents'
             },
             {
                 type: 'input',
@@ -51,19 +51,17 @@ function promptUser() {
                 type: 'input',
                 message: 'Enter Tests info',
                 name: 'tests'
-
             }
         ]);
 }
 
-async function init() {
+function init() {
     console.log('success');
     try {
         promptUser().then((data) => {
-            api.getUser(data.username);
-            const readMe = generator.generateMarkdown(data);
-
-            writeFileAsync('README.md', readMe);
+           
+            console.log(data);
+            writeFileAsync('README.md', generateMarkdown(data));
 
             console.log("success");
         });
