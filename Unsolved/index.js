@@ -1,10 +1,8 @@
 const inquirer = require('inquirer');
-
 const fs = require('fs');
 const util = require('util');
 
 const generateMarkdown = require('./utils/generateMarkdown');
-
 const writeFileAsync = util.promisify(fs.writeFile);
 
 function promptUser() {
@@ -59,10 +57,8 @@ function init() {
     console.log('success');
     try {
         promptUser().then((data) => {
-           
             console.log(data);
             writeFileAsync('README.md', generateMarkdown(data));
-
             console.log("success");
         });
     } catch (err) {
